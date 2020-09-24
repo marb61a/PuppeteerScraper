@@ -27,6 +27,25 @@ const secrets = require('./secrets');
     // XPath approach, works better in this case
     const loginButton = await page.$x('//*[@id="loginForm"]/div/div[3]/button');
     loginButton[0].click();
+
+    // Wait needed to avoid error
+    // await page.waitFor(3000);
+    // Waiting for navigation is a better solution
+    await page.waitForNavigation();
+
+    const USERNAME = aaronjack;
+    await page.goto(`https://instagram.com/${USERNAME}`);
+
+    await page.waitForSelector('article a');
+
+    // Click on the image to be liked
+    // Image class name is usually obfuscated
+    await(await page.$('artcle a')).click();
+
+    // Click on the like button
+    // Needs to be a wait to avoid wrong clicking on a button
+    await page.waitFor(1000);
+    await(await page.$$('button'))[2].click();
     
     // await browser.close();
     
