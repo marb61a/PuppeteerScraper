@@ -4,7 +4,7 @@ const secrets = require('./secrets');
 
 (async () => {
     const browser = await puppeteer.launch({
-        headless: false,
+        // headless: false,
         defaultViewport: null,
         args: ['--start-maximized']        
     });
@@ -37,10 +37,25 @@ const secrets = require('./secrets');
         // console.log({imgSrc});
 
         // Get header data
-        const headerData = await page.$$eval('header li');
-        
+        // Will return an array so can be mapped over
+        // Should give the text content of followers, following and posts
+        const headerData = await page.$$eval('header li', 
+            els => els.map(el => el.textContent)
+        );
+
+        // Finding name
+        const name = await page.$eval('header h1', el => el.textContent);
+
+        // Description, will be the 4th span element
+        const description = await page.$$eval('span', el => el[4].textContent);
+
+        // Creating an object with all properties
+        const profile = {imgSrc, headerData, name, description};
+        console.log(profile);
+
     }
     
+    // Project works in headless mode
     // await browser.close();
     
 })();
