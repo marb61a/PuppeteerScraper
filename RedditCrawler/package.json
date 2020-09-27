@@ -1,12 +1,16 @@
 {
-  "name": "RedditCrawler",
+  "name": "redditcrawler",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple reddit crawler",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Martin",
+  "license": "ISC",
+  "dependencies": {
+    "google-spreadsheet": "^3.0.13",
+    "puppeteer": "^5.3.1"
+  }
 }
