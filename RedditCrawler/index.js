@@ -71,11 +71,13 @@ const url = 'https://old.reddit.com/r/learnprogramming/comments/4q6tae/i_highly_
 
     // Sort comments by point
     formattedComments.sort((a, b) => {
-        const pointsA = Number(a.points.split('')[0]);
-        const pointsB = Number(b.points.split('')[0]);
+        const pointsA = Number(a.points.split(' ')[0]);
+        const pointsB = Number(b.points.split(' ')[0]);
 
         return pointsB - pointsA;
     });
+
+    // Add to google spreadsheet
 
     console.log(formattedComments.slice(0, 10));
 
