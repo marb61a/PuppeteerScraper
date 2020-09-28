@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 
+const Sheet = require('./sheet');
 const url = 'https://old.reddit.com/r/learnprogramming/comments/4q6tae/i_highly_recommend_harvards_free_online_2016_cs50';
 
 (async function(){
@@ -14,6 +15,13 @@ const url = 'https://old.reddit.com/r/learnprogramming/comments/4q6tae/i_highly_
     await page.screenshot({
         path: 'example.png'
     });
+
+    // Create a sheet with a title
+    const sheet = new Sheet();
+    await sheet.load();
+    const title = await page.$eval('.title a', el => el.textContent);
+    // Sheet name cannot be more than 100 characters
+    const sheetIndex = await sheet.addSheet(title.slice(0, 99), ['points', 'text']);
 
     // Expand all comment threads on the page
     // $ will do the same as document.querySelector
@@ -77,9 +85,10 @@ const url = 'https://old.reddit.com/r/learnprogramming/comments/4q6tae/i_highly_
         return pointsB - pointsA;
     });
 
-    // Add to google spreadsheet
-
     console.log(formattedComments.slice(0, 10));
+
+    // Add to google spreadsheet
+    sheet.addRows(formattedComments, sheetIndex);
 
     await browser.close();
 
