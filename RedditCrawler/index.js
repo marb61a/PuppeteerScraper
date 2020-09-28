@@ -55,13 +55,29 @@ const url = 'https://old.reddit.com/r/learnprogramming/comments/4q6tae/i_highly_
 
         // Scrape the text for each comment
         // Most of the text without points also have no text
-        const text = await comment.$eval('.usertext-body', 
+        const rawText = await comment.$eval('.usertext-body', 
             el => el.textContent
         ).catch(err => console.error('no text'));
 
-        console.log({ points, text });
+        // If points and comments exist they will be added to the array
+        if(points && rawText){
+            // Replace /n characters to clean up text
+            const text = rawText.replace(/\n/g, '');
+
+            formattedComments.push({points, text});
+        }
 
     }
+
+    // Sort comments by point
+    formattedComments.sort((a, b) => {
+        const pointsA = Number(a.points.split('')[0]);
+        const pointsB = Number(b.points.split('')[0]);
+
+        return pointsB - pointsA;
+    });
+
+    console.log(formattedComments.slice(0, 10));
 
     await browser.close();
 
