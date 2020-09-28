@@ -41,8 +41,26 @@ const url = 'https://old.reddit.com/r/learnprogramming/comments/4q6tae/i_highly_
 
     // Select all comments and scrape text + points
     const comments = await page.$$('.entry');
+    
+    // Array to hold comments
+    const formattedComments = [];
+
     for(let comment of comments){
-        
+        // Scrape the points for each comment
+        // Similar to $ but will take a second argument to run a function on the element
+        // Will need to have a catch element to catch any error where thare are no points
+        const points = await comment.$eval('.score', 
+            el => el.textContent
+        ).catch(err => console.error('no score'));
+
+        // Scrape the text for each comment
+        // Most of the text without points also have no text
+        const text = await comment.$eval('.usertext-body', 
+            el => el.textContent
+        ).catch(err => console.error('no text'));
+
+        console.log({ points, text });
+
     }
 
     await browser.close();
